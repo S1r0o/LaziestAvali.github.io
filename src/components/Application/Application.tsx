@@ -47,6 +47,7 @@ export const Application = (props: IApplicationProps) => {
         courses: props.buyCourses
       }
     })
+    alert('Заявка успешно отправлена')
   }
 
   return (
