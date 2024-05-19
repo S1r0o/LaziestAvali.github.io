@@ -3,11 +3,10 @@ import {JSX} from 'react'
 export interface IModalProps {
   body: JSX.Element
   footer: JSX.Element
-  image: string
+  image?: string
 }
 
 export const Modal = (props: IModalProps) => {
-
   return (
     <div className="modal show">
       <div className="modal-container">

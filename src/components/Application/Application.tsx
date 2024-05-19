@@ -1,7 +1,15 @@
 import {IDepartmentItem} from '../../hooks/useDepartments.ts'
+import {useForm, SubmitHandler} from 'react-hook-form'
+import {useRequest} from '../../hooks'
 
 interface IApplicationProps {
   buyCourses: IDepartmentItem[]
+}
+
+type Inputs = {
+  fio: string
+  group: string
+  phoneNumber: string
 }
 
 const useSelectedCourse = (buyCourses: IDepartmentItem[]) => {
@@ -21,9 +29,28 @@ const useSelectedCourse = (buyCourses: IDepartmentItem[]) => {
 
 export const Application = (props: IApplicationProps) => {
   const selectedCourseTemplate = useSelectedCourse(props.buyCourses)
+  const {
+    register,
+    handleSubmit
+  } = useForm<Inputs>()
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!props.buyCourses.length) {
+      alert('Выберите хотя бы один курс')
+      return
+    }
+    await useRequest({
+      endpoint: '/application',
+      method: 'POST',
+      data: {
+        ...data,
+        courses: props.buyCourses
+      }
+    })
+  }
 
   return (
-    <form action="#" className="form">
+    <form onSubmit={handleSubmit(onSubmit)} className="form">
       <div className="form-left">
         <p>Выбранные курсы:</p>
         {selectedCourseTemplate}
@@ -32,15 +59,15 @@ export const Application = (props: IApplicationProps) => {
         <div className="form-inputs">
           <div className="form-row">
             <label htmlFor="fio" className="form__label">ФИО:</label>
-            <input className="form__input" id="fio" required type="text"/>
+            <input className="form__input" required type="text" {...register('fio')}/>
           </div>
           <div className="form-row">
             <label htmlFor="number" className="form__label">Номер телефона (в формате 89999002121):</label>
-            <input className="form__input" id="number" maxLength={11} pattern="[0-9]{11}" required type="tel"/>
+            <input className="form__input" maxLength={11} pattern="[0-9]{11}" required type="tel" {...register('phoneNumber')}/>
           </div>
           <div className="form-row">
             <label htmlFor="group" className="form__label">Номер группы:</label>
-            <input className="form__input" id="group" maxLength={6} required/>
+            <input className="form__input" maxLength={6} required {...register('group')}/>
           </div>
         </div>
         <div className="form-small-text">
