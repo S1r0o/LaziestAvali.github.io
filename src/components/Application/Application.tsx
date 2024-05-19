@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {IDepartmentItem} from '../../hooks/useDepartments.ts'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import {useRequest} from '../../hooks'
@@ -50,6 +52,13 @@ export const Application = (props: IApplicationProps) => {
     alert('Заявка успешно отправлена')
   }
 
+  const coursesTotalCost = React.useMemo(() => {
+    return props.buyCourses.reduce((sum, course) => {
+      sum += course.price
+      return sum
+    }, 0)
+  }, [props.buyCourses])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form">
       <div className="form-left">
@@ -76,7 +85,7 @@ export const Application = (props: IApplicationProps) => {
           <p>* Группа формируется от 10 человек</p>
         </div>
 
-        <div>Стоимость выбранных курсов: <span className="total-price"></span></div>
+        <div>Стоимость выбранных курсов: <span className="total-price">{coursesTotalCost}</span></div>
         <div className="form-buttons">
           <input type="submit" className="button accent" value="Отправить заявку"/>
         </div>
