@@ -5,7 +5,7 @@ interface IRequestParams {
   data?: unknown
 }
 
-const HOST_NAME = 'https://22b6-95-25-218-105.ngrok-free.app'
+const HOST_NAME = 'https://a245-95-25-218-105.ngrok-free.app'
 
 export async function useRequest(params: IRequestParams): Promise<unknown> {
   try {
